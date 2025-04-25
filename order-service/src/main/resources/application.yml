@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/order_db
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate.ddl-auto: validate
+  kafka:
+    bootstrap-servers: kafka:9092
+    admin:
+      auto-create: true            # Автосоздание топиков при старте
+      properties:
+        min.insync.replicas: 1    # Гарантия доставки
+      producer:
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+        properties:
+          retries: 3                 # Попытки повторной отправки
+          acks: all                 # Подтверждение от всех реплик
+
+flyway:
+  locations: classpath:db/migration
+  enabled: true

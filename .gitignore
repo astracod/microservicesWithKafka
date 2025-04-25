@@ -1,0 +1,17 @@
+# Java
+*.class
+*.jar
+target/
+bin/
+
+# Maven
+pom.xml.versionsBackup
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Docker
+*.log
+logs/
