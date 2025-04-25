@@ -17,6 +17,7 @@ spring:
         properties:
           retries: 3                 # Попытки повторной отправки
           acks: all                 # Подтверждение от всех реплик
+          spring.json.add.type.headers: false
 
 flyway:
   locations: classpath:db/migration
