@@ -1,3 +1,6 @@
+server:
+  port: 8082
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5433/order_db
@@ -6,7 +9,7 @@ spring:
   jpa:
     hibernate.ddl-auto: validate
   kafka:
-    bootstrap-servers: kafka:9092
+    bootstrap-servers: localhost:9093
     admin:
       auto-create: true            # Автосоздание топиков при старте
       properties:

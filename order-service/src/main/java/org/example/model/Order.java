@@ -2,9 +2,9 @@ package org.example.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -19,17 +19,21 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;  // Связь вместо productId
+    @Column(nullable = false)
+    private UUID userId;
+
+    @Column(nullable = false)
+    private String productName;
+
+    @Column(nullable = false)
+    private BigDecimal productPrice;
 
     @Column(nullable = false)
     private Integer quantity;
 
-    @Column(nullable = false, length = 20)
-    private String status;
+    @Column(nullable = false)
+    private String status = "CREATED";
 
-    @Column(name = "created_at")
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+    @Column(updatable = false)
+    private Instant createdAt = Instant.now();
 }

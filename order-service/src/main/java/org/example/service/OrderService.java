@@ -4,50 +4,35 @@ import lombok.RequiredArgsConstructor;
 import org.example.dto.OrderRequest;
 import org.example.event.OrderEvent;
 import org.example.model.Order;
-import org.example.model.Product;
 import org.example.repository.OrderRepository;
-import org.example.repository.ProductRepository;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final ProductRepository productRepository;
     private final KafkaTemplate<String, OrderEvent> kafkaTemplate;
 
+    @Transactional
     public Order createOrder(OrderRequest request) {
-        // 1. Находим продукт
-        Product product = productRepository.findById(request.getProductId())
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+        Order order = new Order();
+        order.setUserId(request.getUserId());
+        order.setProductName(request.getProductName());
+        order.setProductPrice(request.getProductPrice());
+        order.setQuantity(request.getQuantity());
 
-        // 2. Создаём заказ
-        Order order = Order.builder()
-                .product(product)
-                .quantity(request.getQuantity())
-                .status("CREATED")
-                .build();
+        Order savedOrder = orderRepository.save(order);
 
-        order = orderRepository.save(order);
+        // Отправка события в Kafka
+        kafkaTemplate.send("order-events", OrderEvent.from(savedOrder));
 
-        // 3. Отправляем событие
-        OrderEvent event = OrderEvent.builder()
-                .correlationId(UUID.randomUUID().toString())
-                .orderId(order.getId())
-                .productId(product.getId())
-                .productName(product.getName())
-                .productPrice(product.getPrice())
-                .quantity(order.getQuantity())
-                .build();
-
-        kafkaTemplate.send("order-events", event);
-
-        return order;
+        return savedOrder;
     }
-    }
+
+
 }
+
+

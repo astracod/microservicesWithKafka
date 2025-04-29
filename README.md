@@ -39,6 +39,43 @@ docker-compose down
 docker-compose down -v
 ```
 
+Вот как можно посмотреть логи Kafka и отфильтровать их на ошибки:
+
+### 1. Посмотреть логи Kafka (все сообщения)
+```bash
+docker-compose logs kafka
+```
+
+### 2. Отфильтровать логи на ошибки (основные варианты):
+
+#### Вариант 1 - только ошибки:
+```bash
+docker-compose logs kafka | grep -i "error\|exception\|warn\|fail"
+```
+
+#### Вариант 2 - с контекстом (20 строк после ошибки):
+```bash
+docker-compose logs kafka | grep -A 20 -i "error\|exception\|warn\|fail"
+```
+
+#### Вариант 3 - конкретно ошибки запуска Kafka:
+```bash
+docker-compose logs kafka | grep -A 30 "KafkaServer id=1"
+```
+
+### 3. Если нужно посмотреть логи в реальном времени:
+```bash
+docker-compose logs -f kafka
+```
+
+### 4. Для проверки подключения к Zookeeper:
+```bash
+docker-compose logs kafka | grep -i "zookeeper"
+```
+### 5. Проверить список топиков в Kafka:
+```bash
+docker-compose exec kafka /opt/bitnami/kafka/bin/kafka-topics.sh --list --bootstrap-server localhost:9092
+```
 ---
 
 ### **Важно:**
