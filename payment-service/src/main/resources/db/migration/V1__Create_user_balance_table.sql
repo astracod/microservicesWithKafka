@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS user_balance (
+    user_id UUID PRIMARY KEY,
+    balance DECIMAL(15, 2) NOT NULL DEFAULT 0.00
+);

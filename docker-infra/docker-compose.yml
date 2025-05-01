@@ -61,9 +61,8 @@ services:
       - "5433:5432"
     environment:
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=order_db
-      - POSTGRES_MULTIPLE_DATABASES=payment_db
     volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - postgres_data:/var/lib/postgresql/data
     networks:
       - kafka-net
