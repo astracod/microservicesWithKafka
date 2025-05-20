@@ -6,7 +6,10 @@
 ```bash
 docker-compose up -d
 ```
-
+### 1.1.1 Запуск контейнера со сборкой
+```bash
+docker-compose up --build -d
+```
 #### **1.2. Проверка состояния**
 ```bash
 docker-compose ps
@@ -39,7 +42,7 @@ docker-compose down
 docker-compose down -v
 ```
 
-### 1.7. Пересобрать образ после мавен сборки
+### 1.7. Пересобрать образ после с учетом изменений
 ```bash
 docker-compose up -d --build
 ```
@@ -55,12 +58,12 @@ docker-compose logs kafka
 
 #### Вариант 1 - только ошибки:
 ```bash
-docker-compose logs kafka | grep -i "error\|exception\|warn\|fail"
+docker-compose logs kafka | grep -iE "error|exception|warn|fail"
 ```
 
 #### Вариант 2 - с контекстом (20 строк после ошибки):
 ```bash
-docker-compose logs kafka | grep -A 20 -i "error\|exception\|warn\|fail"
+docker-compose logs kafka | grep -A 20 -iE "error|exception|warn|fail"
 ```
 
 #### Вариант 3 - конкретно ошибки запуска Kafka:
